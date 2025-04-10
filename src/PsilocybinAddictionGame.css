@@ -1118,6 +1118,58 @@ body {
   border-bottom: 1px solid #e2e8f0;
   color: #2d3748;
 }
+
+.brain-container {
+  position: relative;
+  width: 100%;
+  height: 160px;
+  background-color: #f7fafc;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.brain-container .node {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background-color: #4a5568;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.brain-container .node.active-node {
+  background-color: #4299e1;
+  box-shadow: 0 0 5px #4299e1;
+}
+
+.brain-container .connection {
+  position: absolute;
+  height: 2px;
+  background-color: #a0aec0;
+  transform-origin: left center;
+  transition: all 0.3s ease;
+}
+
+.brain-container .connection.active-connection {
+  background-color: #4299e1;
+  box-shadow: 0 0 3px #4299e1;
+}
+
+.trip-visuals .visual-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, rgba(128, 90, 213, 0.2), transparent 70%);
+  animation: pulse 10s infinite alternate;
+  opacity: 0.3;
+  z-index: 0;
+}
+
+.trip-visuals .mushroom-visuals {
+  z-index: 1;
+}
 .obstacles-container {
   position: relative; /* Ensure container can hold absolutely positioned children */
   width: 100%;

@@ -10,7 +10,7 @@ const PsilocybinAddictionGame = () => {
     { id: 4, text: "Smoking is part of my identity", strength: 80, color: 'fill-red-4' }
   ];
 
-  // Game state: 'intro', 'tutorial', 'session', 'badTrip', 'challenge', 'insights', 'integration', 'results'
+  // --- Game State ---
   const [gameState, setGameState] = useState('intro');
   const [level, setLevel] = useState(1);
   const [score, setScore] = useState(0);
@@ -23,7 +23,7 @@ const PsilocybinAddictionGame = () => {
     { id: 4, text: "I can redefine who I am", strength: 5, color: 'fill-green-4', unlocked: false, clicks: 0 }
   ]);
 
-  // Additional state variables
+  // --- Additional State Variables ---
   const [therapyProgress, setTherapyProgress] = useState(0);
   const [recoveryRate, setRecoveryRate] = useState(0);
   const [message, setMessage] = useState('');
@@ -36,26 +36,27 @@ const PsilocybinAddictionGame = () => {
   const [badTripClicks, setBadTripClicks] = useState(0);
   const [eurekaActive, setEurekaActive] = useState(false);
   const [eurekaPosition, setEurekaPosition] = useState({ x: 50, y: 50 });
-  const [eurekaTimer, setEurekaTimer] = useState(0);
-  const [eurekaTimeout, setEurekaTimeout] = useState(null);
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [musicPlaying, setMusicPlaying] = useState(false);
   const [challengeLevel, setChallengeLevel] = useState(1);
   const [timeLimit, setTimeLimit] = useState(12);
-  const [timerActive, setTimerActive] = useState(true);
   const [timeRemaining, setTimeRemaining] = useState(12);
   const [obstacles, setObstacles] = useState([]);
   const [scoreMultiplier, setScoreMultiplier] = useState(1);
   const [showMultiplierEffect, setShowMultiplierEffect] = useState(false);
   const [particleEffects, setParticleEffects] = useState([]);
   const [fadeOutPatterns, setFadeOutPatterns] = useState([]);
+  const [isPaused, setIsPaused] = useState(false);
   const [tutorialStep, setTutorialStep] = useState(1);
   const [showTooltip, setShowTooltip] = useState(false);
+
 
   // Refs for animations, timers, and idle tracking
   const animationRef = useRef(null);
   const timerRef = useRef(null);
+  const musicOscillatorsRef = useRef([]);
   const lastInsightClickRef = useRef(Date.now());
+  const eurekaTimeoutRef = useRef(null);
 
   // --- Effects for updating brain connections and trip visuals ---
   useEffect(() => {
@@ -126,42 +127,24 @@ const PsilocybinAddictionGame = () => {
 
   // --- Timer effect for challenges ---
   useEffect(() => {
-    if (!timerActive) return;
-    const interval = setInterval(() => {
-      setTimeRemaining(prevTime => {
-        if (prevTime <= 1) {
-          clearInterval(interval);
-          setTimerActive(false);
-          if (gameState === 'insights') {
-            setMessage("Time's up! You need to move faster in the next session.");
+    if (timerActive) {
+      const timerInterval = setInterval(() => {
+        setTimeRemaining(prevTime => {
+          if (prevTime <= 1) {
+            clearInterval(timerInterval);
+            if (gameState === 'insights') {
+              setMessage("Time's up! You need to move faster in the next session.");
+            }
             setGameState('integration');
-          }
-          return 0;
-        }
-        return prevTime - 1;
-      });
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [timerActive, gameState]);
-
-  // --- Eureka moment effect ---
-  useEffect(() => {
-    if (eurekaActive) {
-      const eurekaInterval = setInterval(() => {
-        setEurekaTimer(prev => {
-          if (prev <= 1) {
-            clearInterval(eurekaInterval);
-            setEurekaActive(false);
             return 0;
+          } else {
+            return prevTime - 1;
           }
-          return prev - 1;
         });
       }, 1000);
-      return () => clearInterval(eurekaInterval);
+      return () => clearInterval(timerInterval);
     }
-  }, [eurekaActive]);
-
-  // --- Animation effect for trip visuals ---
+  }, [timerActive, gameState]);
   const AudioContext = window.AudioContext || window.webkitAudioContext;
   const audioContext = useRef(null);
   useEffect(() => {
@@ -224,7 +207,7 @@ const PsilocybinAddictionGame = () => {
     setDefaultNetworkActivity(100);
     setThoughtPatterns(initialThoughtPatterns);
     setNewPerspectives([
-      { id: 1, text: "I can find healthier ways to relax", strength: 10, color: 'fill-green-1', unlocked: false, clicks: 0 },
+      { id: 1, text: "I can find healthier ways to relax", strength: 5, color: 'fill-green-1', unlocked: false, clicks: 0 },
       { id: 2, text: "I have tools to manage stress", strength: 5, color: 'fill-green-2', unlocked: false, clicks: 0 },
       { id: 3, text: "Past failures don't define future attempts", strength: 5, color: 'fill-green-3', unlocked: false, clicks: 0 },
       { id: 4, text: "I can redefine who I am", strength: 5, color: 'fill-green-4', unlocked: false, clicks: 0 }
@@ -238,7 +221,6 @@ const PsilocybinAddictionGame = () => {
     setBadTripActive(false);
     setBadTripClicks(0);
     setEurekaActive(false);
-    setEurekaTimer(0);
     setChallengeLevel(1);
     setTimeLimit(12);
     setTimeRemaining(12);
@@ -279,7 +261,7 @@ const PsilocybinAddictionGame = () => {
     setMessage("Level " + level + ": Begin psilocybin session. Reduce DMN activity to open the mind to new perspectives.");
     setShowBounce(true);
     setTimeout(() => setShowBounce(false), 5000);
-    const newTimeLimit = Math.max(10, 30 - (level * 5));
+    const newTimeLimit = Math.max(10, 30 - (level * 2));
     setTimeLimit(newTimeLimit);
     setTimeRemaining(newTimeLimit);
     if (soundEnabled) {
@@ -289,6 +271,7 @@ const PsilocybinAddictionGame = () => {
 
   const playSound = (type) => {
     if (!soundEnabled) return;
+    let timeoutId;
     if (!audioContext.current) {
       audioContext.current = new AudioContext();
     }
@@ -302,32 +285,40 @@ const PsilocybinAddictionGame = () => {
         oscillator.frequency.value = 440;
         gainNode.gain.value = 0.1;
         oscillator.start();
-        setTimeout(() => oscillator.stop(), 100);
+        timeoutId = setTimeout(() => oscillator.stop(), 100);
         break;
       case 'insight':
         oscillator.type = 'sine';
         oscillator.frequency.value = 880;
         gainNode.gain.value = 0.1;
         oscillator.start();
-        setTimeout(() => oscillator.stop(), 200);
+        timeoutId = setTimeout(() => oscillator.stop(), 200);
         break;
       case 'badTrip':
         oscillator.type = 'sawtooth';
         oscillator.frequency.value = 220;
         gainNode.gain.value = 0.15;
         oscillator.start();
-        gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.current.currentTime + 0.5);
-        setTimeout(() => oscillator.stop(), 500);
+        gainNode.gain.exponentialRampToValueAtTime(
+          0.001,
+          audioContext.current.currentTime + 0.5
+        );
+        timeoutId = setTimeout(() => oscillator.stop(), 500);
         break;
       case 'eureka':
         oscillator.type = 'sine';
         oscillator.frequency.value = 880;
         gainNode.gain.value = 0.2;
         oscillator.start();
-        oscillator.frequency.exponentialRampToValueAtTime(1760, audioContext.current.currentTime + 0.3);
-        setTimeout(() => oscillator.stop(), 300);
+        oscillator.frequency.exponentialRampToValueAtTime(
+          1760,
+          audioContext.current.currentTime + 0.3
+        );
+        timeoutId = setTimeout(() => oscillator.stop(), 300);
         break;
       default:
+        timeoutId = setTimeout(() => oscillator.stop(), 0);
+
         break;
     }
   };
@@ -351,20 +342,29 @@ const PsilocybinAddictionGame = () => {
     gainNode.gain.value = 0.05;
     oscillator1.start();
     oscillator2.start();
-    window.musicOscillators = [oscillator1, oscillator2];
-    window.musicGainNode = gainNode;
+    musicOscillatorsRef.current = [oscillator1, oscillator2];
   };
 
   const stopAmbientMusic = () => {
     if (!musicPlaying) return;
-    if (window.musicOscillators) {
-      window.musicOscillators.forEach(osc => {
-        try { osc.stop(); } catch (e) { }
-      });
-    }
+    musicOscillatorsRef.current.forEach((osc) => {
+      try {
+        osc.stop();
+      } catch (e) {}
+    });
+
     setMusicPlaying(false);
   };
 
+  useEffect(() => {
+    return () => {
+      if (musicOscillatorsRef.current) {
+        musicOscillatorsRef.current.forEach(osc => {
+          try { osc.stop(); } catch (e) { }
+        });
+      }
+    };
+  }, []);
   // Bad trip mechanics
   const handleBadTripAction = () => {
     playSound('badTrip');
@@ -390,7 +390,9 @@ const PsilocybinAddictionGame = () => {
         setNewPerspectives(updatedPerspectives);
         setTimeout(() => {
           setMessage("The challenge has deepened the patient's perspective: \"" +
-            updatedPerspectives.find(p => p.id === randomPerspectiveId).text + "\"");
+            updatedPerspectives.find(
+              (p) => p.id === randomPerspectiveId
+            ).text + "\"");
         }, 3000);
         return 0;
       }
@@ -403,14 +405,13 @@ const PsilocybinAddictionGame = () => {
     const randomX = 20 + Math.random() * 60;
     const randomY = 30 + Math.random() * 40;
     setEurekaPosition({ x: randomX, y: randomY });
-    setEurekaTimer(5);
     setEurekaActive(true);
-    if (eurekaTimeout) clearTimeout(eurekaTimeout);
-    const timeout = setTimeout(() => {
+    clearTimeout(eurekaTimeoutRef.current); // Clear any existing timeout
+    eurekaTimeoutRef.current = setTimeout(() => {
       setEurekaActive(false);
-      setEurekaTimer(0);
     }, 5000);
-    setEurekaTimeout(timeout);
+  
+
     playSound('eureka');
   };
 
@@ -427,7 +428,9 @@ const PsilocybinAddictionGame = () => {
     );
     setNewPerspectives(updatedPerspectives);
     for (let i = 0; i < 10; i++) {
-      addParticleEffect({
+
+      addParticleEffect(
+        {
         x: eurekaPosition.x + Math.random() * 10 - 5,
         y: eurekaPosition.y + Math.random() * 10 - 5,
         color: 'gold'
@@ -445,19 +448,54 @@ const PsilocybinAddictionGame = () => {
 
   // Particle and fade-out effects
   const addParticleEffect = (particleProps) => {
-    const newParticle = {
-      id: Math.random().toString(36).substr(2, 9),
-      x: particleProps.x,
-      y: particleProps.y,
-      color: particleProps.color || 'white',
-      size: particleProps.size || 5,
-      lifetime: 30
-    };
-    setParticleEffects(prev => [...prev, newParticle]);
-    setTimeout(() => {
-      setParticleEffects(prev => prev.filter(p => p.id !== newParticle.id));
-    }, 1000);
+    setParticleEffects((prevParticles) => {
+      if (prevParticles.length >= 50) {
+        return prevParticles; // Don't add more if limit reached
+      }
+
+      const newParticle = {
+        id: Math.random().toString(36).substr(2, 9),
+        x: particleProps.x,
+        y: particleProps.y,
+        color: particleProps.color || 'white',
+        size: particleProps.size || 5,
+        lifetime: 100, // Initial lifetime
+        speedX: 0.2 + Math.random() * 0.2, // Slight rightward movement
+        speedY: (Math.random() - 0.5) * 0.5, // Slight vertical variation
+      };
+      return [...prevParticles, newParticle];
+    });
   };
+
+  useEffect(() => {
+    let animationFrameId;
+
+    const updateParticles = () => {
+      setParticleEffects((prevParticles) =>
+        prevParticles.reduce((updatedParticles, particle) => {
+          const updatedParticle = {
+            ...particle,
+            x: particle.x + particle.speedX,
+            y: particle.y + particle.speedY,
+            lifetime: particle.lifetime - 1,
+          };
+
+          // Apply fading effect as particle's lifetime decreases
+          if (updatedParticle.lifetime > 0) {
+            updatedParticles.push(updatedParticle);
+          }
+
+          return updatedParticles;
+        }, [])
+      );
+
+      animationFrameId = requestAnimationFrame(updateParticles);
+    };
+
+    animationFrameId = requestAnimationFrame(updateParticles);
+
+    return () => cancelAnimationFrame(animationFrameId);
+  }, []);
 
   const addFadeOutPattern = (patternId) => {
     setFadeOutPatterns(prev => [...prev, patternId]);
@@ -486,13 +524,23 @@ const PsilocybinAddictionGame = () => {
       } else {
         setGameState('insights');
         setMessage("DMN activity reduced! The patient's mind is more open. Engage with insights to advance your therapy.");
-        setTimerActive(true);
+        setTimeRemaining(timeLimit); // Reset timer for insights phase
+  
+        // Eureka moment within insights
         setTimeout(() => {
-          if (Math.random() < 0.7) { triggerEurekaMoment(); }
+          if (Math.random() < 0.7) {
+            triggerEurekaMoment();
+          }
         }, 5000 + Math.random() * 10000);
-      }
+        }
     }
   };
+
+  
+  useEffect(() => {
+    // This effect doesn't directly manage a timeout, so no cleanup is needed here.
+    // The timeout is now handled within the conductSession function.
+  }, [gameState]);
 
   // Updated processInsights: increments clicks and updates last click time.
   const processInsights = (insightId) => {
@@ -539,7 +587,9 @@ const PsilocybinAddictionGame = () => {
           x: relativeX + Math.random() * 10 - 5,
           y: relativeY + Math.random() * 10 - 5,
           color: updatedPerspectives.find(p => p.id === insightId).color.replace('fill-', '')
-        });
+        }
+
+      );
       }
     }
     
@@ -579,27 +629,56 @@ const PsilocybinAddictionGame = () => {
     }
   }, [gameState]);
 
-  const integrateExperience = () => {
+  const integrateExperience = async () => {
     playSound('button');
-    setLevel(prev => prev + 1);
     setDefaultNetworkActivity(prev => Math.min(prev + 10, 70));
     const avgOldStrength = thoughtPatterns.reduce((sum, p) => sum + p.strength, 0) / thoughtPatterns.length;
     const avgNewStrength = newPerspectives.reduce((sum, p) => sum + p.strength, 0) / newPerspectives.length;
     setTherapyProgress(avgNewStrength);
     setRecoveryRate(100 - avgOldStrength);
     setScore(prev => prev + 200);
-    if (level < 3) {
-      setGameState('session');
-      setMessage(`Level ${level + 1}: The patient has integrated previous insights. Begin next psilocybin session.`);
-      setChallengeLevel(prev => prev + 1);
+
+    // --- Save score to Firestore ---
+    if (auth.currentUser) { // Check if user is logged in
+      try {
+        await addDoc(collection(db, "leaderboard"), {
+          userId: auth.currentUser.uid,
+          username: auth.currentUser.displayName || "Anonymous", // Get username, or use "Anonymous"
+          score: score, // The score from the game
+          timestamp: serverTimestamp() // Timestamp for when the score was saved
+        });
+        console.log("Score saved successfully!");
+      } catch (error) {
+        console.error("Error saving score: ", error);
+      }
     } else {
-      setGameState('results');
-      setMessage("Treatment complete! Let's see how effective the therapy was in transforming thought patterns.");
+      console.warn("User not logged in. Score not saved.");
+    }
+    setLevel(prev => prev + 1);
+  };
+  const proceedToNextLevel = () => {
+    if (level < 3) {
+        // Transition to the next session
+        setGameState('session');
+        setMessage(`Level ${level + 1}: The patient has integrated previous insights. Begin next psilocybin session.`);
+        setChallengeLevel(prev => prev + 1);
+    } else {
+        // End of treatment, show results
+        setGameState('results');
+        setMessage("Treatment complete! Let's see how effective the therapy was in transforming thought patterns.");
     }
   };
 
-  // Toggle game theme and sound
-  const changeVisualTheme = (theme) => { setVisualTheme(theme); };
+  const { db, auth } = require('./firebase');
+
+
+
+
+
+
+
+
+  // Game theme and sound
   const toggleSound = () => {
     setSoundEnabled(prev => !prev);
     if (musicPlaying) { stopAmbientMusic(); }
@@ -688,25 +767,24 @@ const PsilocybinAddictionGame = () => {
     );
   };
 
-  const ParticleEffects = () => {
-    return (
-      <div className="particle-container">
-        {particleEffects.map(particle => (
-          <div
-            key={particle.id}
-            className="particle"
-            style={{
-              left: `${particle.x}%`,
-              top: `${particle.y}%`,
-              background: particle.color,
-              width: `${particle.size}px`,
-              height: `${particle.size}px`
-            }}
-          ></div>
-        ))}
-      </div>
-    );
-  };
+  const ParticleEffects = () => (
+    <div className="particle-container">
+      {particleEffects.map((particle) => (
+        <div
+          key={particle.id}
+          className="particle"
+          style={{
+            left: `${particle.x}%`,
+            top: `${particle.y}%`,
+            backgroundColor: particle.color,
+            opacity: particle.lifetime / 100, // Fading effect
+            width: `${particle.size}px`,
+            height: `${particle.size}px`,
+          }}
+        ></div>
+      ))}
+    </div>
+  );
 
   // --- Render the game UI based on current state ---
   return (
@@ -940,6 +1018,9 @@ const PsilocybinAddictionGame = () => {
         {gameState === 'integration' && (
           <div className="integration-screen">
             <h2>Integration Phase</h2>
+            
+            <p>Level: {level}</p> {/* Display the current level */}
+            
             <p>{message}</p>
             <div className="integration-visual">
               <div className="brain-changes">
@@ -964,7 +1045,7 @@ const PsilocybinAddictionGame = () => {
                 </div>
               </div>
             </div>
-            <button onClick={integrateExperience} className="main-button">
+            <button onClick={proceedToNextLevel} className="main-button">
               {level < 3 ? "Continue to Next Session" : "Complete Treatment"}
             </button>
           </div>
