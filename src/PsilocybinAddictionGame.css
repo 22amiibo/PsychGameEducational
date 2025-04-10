@@ -1,0 +1,1219 @@
+/* Base styles and reset */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.5;
+}
+
+/* Main container */
+.game-container {
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  background-color: #f0f5ff;
+  min-height: 100vh;
+  color: #333;
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-default {
+  background-color: #f0f5ff;
+}
+
+.theme-calm {
+  background-color: #e6f7ff;
+}
+
+.theme-intense {
+  background-color: #9e3be5;
+}
+
+/* Header section */
+.game-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.game-header h1 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.game-controls {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.control-button, .theme-button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: #4a5568;
+  color: white;
+  font-weight: 500;
+}
+
+.theme-selector {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.theme-button.default {
+  background-color: #4a5568;
+}
+
+.theme-button.calm {
+  background-color: #3182ce;
+}
+
+.theme-button.intense {
+  background-color: #805ad5;
+}
+
+/* Game stats section */
+.game-stats {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat-label {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.stat-value {
+  font-size: 1.25rem;
+}
+
+.multiplier {
+  font-size: 0.875rem;
+  color: #38a169;
+  font-weight: bold;
+}
+
+.multiplier-active {
+  animation: pulse 1s infinite;
+}
+
+.progress-bar {
+  width: 150px;
+  height: 10px;
+  background-color: #e2e8f0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background-color: #4299e1;
+  transition: width 0.3s ease;
+}
+
+/* Progress steps */
+.progress-step {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.step-indicator {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.step-indicator.completed {
+  background-color: #48bb78;
+  color: white;
+}
+
+.step-connector {
+  width: 30px;
+  height: 3px;
+  background-color: #e2e8f0;
+}
+
+/* Game content section */
+.game-content {
+  flex: 1;
+  background-color: white;
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1rem;
+}
+
+.game-content h2 {
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.game-content p {
+  margin-bottom: 1rem;
+}
+
+/* Button styles */
+.main-button, .secondary-button, .calm-button {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.main-button {
+  background-color: #4299e1;
+  color: white;
+}
+
+.secondary-button {
+  background-color: #e2e8f0;
+  color: #4a5568;
+}
+
+.calm-button {
+  background-color: #38a169;
+  color: white;
+}
+
+.button-row {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.bounce {
+  animation: bounce 0.5s ease infinite alternate;
+}
+
+/* Intro screen */
+.intro-screen {
+  text-align: center;
+}
+
+/* Tutorial screen */
+.tutorial-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.tutorial-visual {
+  height: 200px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 2rem 0;
+  background-color: #f7fafc;
+  border-radius: 8px;
+}
+
+.tutorial-dmt {
+  display: flex;
+  gap: 2rem;
+}
+
+.tutorial-insights {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.thought-pattern, .new-perspective {
+  padding: 1rem;
+  background-color: #f0f5ff;
+  border-radius: 8px;
+  max-width: 300px;
+}
+
+.arrow-down {
+  font-size: 2rem;
+}
+
+.tutorial-badtrip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.bad-trip-icon {
+  font-size: 3rem;
+}
+
+.tutorial-eureka {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.eureka-icon {
+  font-size: 3rem;
+}
+
+/* Session screen */
+.session-screen {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.brain-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: #f7fafc;
+  border-radius: 8px;
+}
+
+.dmn-meter {
+  width: 100%;
+}
+
+.meter-label {
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.meter-container {
+  height: 10px;
+  background-color: #e2e8f0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.meter-fill {
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+.meter-fill.high {
+  background-color: #e53e3e;
+}
+
+.meter-fill.medium {
+  background-color: #f6ad55;
+}
+
+.meter-fill.low {
+  background-color: #48bb78;
+}
+
+.thought-patterns {
+  margin-top: 1rem;
+}
+
+.thought-patterns h3 {
+  margin-bottom: 1rem;
+}
+
+.pattern-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.pattern-card {
+  flex: 1;
+  min-width: 200px;
+  padding: 1rem;
+  background-color: #f7fafc;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: opacity 0.5s ease;
+}
+
+.pattern-card.fading {
+  opacity: 0.5;
+}
+
+.card-header {
+  margin-bottom: 0.5rem;
+}
+
+.card-text {
+  margin-bottom: 1rem;
+}
+
+.strength-meter {
+  height: 8px;
+  background-color: #e2e8f0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.strength-fill {
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+.strength-fill.red {
+  background-color: #e53e3e;
+}
+
+.strength-fill.green {
+  background-color: #48bb78;
+}
+
+/* Bad trip screen */
+.bad-trip-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.bad-trip-visuals {
+  width: 100%;
+  height: 200px;
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.turbulent-mind {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-radial-gradient(
+    circle at 50% 50%,
+    rgba(255, 0, 0, 0.1),
+    rgba(0, 255, 0, 0.1) 20px,
+    rgba(0, 0, 255, 0.1) 40px
+  );
+  animation: psychedelic 5s infinite linear;
+}
+
+.distortion-effect {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    circle at 50% 50%,
+    transparent,
+    rgba(0, 0, 0, 0.2)
+  );
+  animation: pulse 3s infinite;
+}
+
+.calm-down-container {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.bad-trip-meter {
+  height: 10px;
+  background-color: #e2e8f0;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.calm-tips {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: #f7fafc;
+  border-radius: 8px;
+  font-size: 0.875rem;
+}
+
+.calm-tips ul {
+  margin-left: 1.5rem;
+}
+
+/* Insights screen */
+.insights-screen {
+  position: relative;
+}
+
+.eureka-moment {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  animation: pulse 1s infinite;
+}
+
+.eureka-icon {
+  font-size: 1.5rem;
+}
+
+.eureka-timer {
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
+.timer-bar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.timer-container {
+  flex: 1;
+  height: 10px;
+  background-color: #e2e8f0;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.timer-fill {
+  height: 100%;
+  background-color: #4299e1;
+  transition: width 0.3s linear;
+}
+
+.timer-value {
+  font-weight: bold;
+  width: 50px;
+  text-align: right;
+}
+
+.insight-container {
+  margin: 1.5rem 0;
+}
+
+.insight-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.insight-card {
+  padding: 1rem;
+  background-color: #f7fafc;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+}
+
+.insight-card.locked {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.insight-card.unlocked {
+  cursor: pointer;
+}
+
+.insight-card.unlocked:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.brain-mini {
+  height: 100px;
+  margin-top: 1rem;
+}
+
+/* Integration screen */
+.integration-screen {
+  text-align: center;
+}
+
+.integration-visual {
+  display: flex;
+  gap: 2rem;
+  margin: 2rem 0;
+  flex-wrap: wrap;
+}
+
+.brain-changes {
+  flex: 1;
+  min-width: 200px;
+}
+
+.progress-summary {
+  flex: 1;
+  min-width: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem;
+  background-color: #f7fafc;
+  border-radius: 4px;
+}
+
+.summary-label {
+  font-weight: 500;
+}
+
+.summary-value {
+  font-weight: bold;
+}
+
+/* Results screen */
+.results-screen {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.final-score {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.score-label {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.score-value {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #4299e1;
+}
+
+.results-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.results-summary h3 {
+  margin-bottom: 0.5rem;
+}
+
+.pattern-cards.small {
+  gap: 0.5rem;
+}
+
+.pattern-card.small {
+  padding: 0.5rem;
+  min-width: 150px;
+}
+
+.pattern-card.initial .strength-fill {
+  width: 95%;
+}
+
+.educational-summary {
+  margin-top: 2rem;
+  padding: 1rem;
+  background-color: #f7fafc;
+  border-radius: 8px;
+}
+
+.educational-summary h3 {
+  margin-bottom: 1rem;
+}
+
+.educational-summary p {
+  margin-bottom: 1rem;
+}
+
+.educational-summary ul {
+  margin-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+/* Brain Network Visualization */
+.brain-network {
+  position: relative;
+  width: 100%;
+  height: 160px;
+  background-color: #f7fafc;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.brain-hemisphere {
+  position: absolute;
+  width: 40%;
+  height: 80px;
+  top: 30px;
+  background-color: #e2e8f0;
+  border-radius: 100px 100px 0 0;
+}
+
+.left-hemisphere {
+  left: 10%;
+}
+
+.right-hemisphere {
+  right: 10%;
+}
+
+.brain-node {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background-color: #4a5568;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.brain-node.active {
+  background-color: #4299e1;
+  box-shadow: 0 0 5px #4299e1;
+}
+
+.brain-connection {
+  position: absolute;
+  height: 2px;
+  background-color: #a0aec0;
+  transform-origin: left center;
+  transition: all 0.3s ease;
+}
+
+.brain-connection.active {
+  background-color: #4299e1;
+  box-shadow: 0 0 3px #4299e1;
+}
+
+/* Cigarette and Mushroom components */
+.cigarette {
+  display: inline-block;
+  position: relative;
+  width: 15px;
+  height: 50px;
+  background-color: white;
+  border: 1px solid #cbd5e0;
+  transition: all 0.3s ease;
+}
+
+.cigarette::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 15px;
+  background-color: #f6ad55;
+}
+
+.cigarette.burning::before {
+  background-color: #f56565;
+}
+
+.cigarette.burning::after {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 5px;
+  width: 5px;
+  height: 10px;
+  background: linear-gradient(to top, #f6ad55, transparent);
+  animation: smoke 2s infinite;
+}
+
+.cigarette.crossed::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: -50%;
+  width: 200%;
+  height: 2px;
+  background-color: #e53e3e;
+  transform: rotate(45deg);
+}
+
+.cigarette.fading {
+  opacity: 0.5;
+  transform: translateY(5px);
+}
+
+.mushroom {
+  display: inline-block;
+  position: relative;
+  width: 40px;
+  height: 45px;
+}
+
+.mushroom-cap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 40px;
+  height: 20px;
+  background-color: #805ad5;
+  border-radius: 20px 20px 0 0;
+}
+
+.mushroom-stem {
+  position: absolute;
+  top: 18px;
+  left: 14px;
+  width: 12px;
+  height: 25px;
+  background-color: #e2e8f0;
+}
+
+.mushroom.active .mushroom-cap {
+  animation: glow 2s infinite alternate;
+}
+
+/* Trip visuals */
+.trip-visuals {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  z-index: 10;
+}
+
+.trip-visuals.active {
+  opacity: 0.3;
+}
+
+.visual-effect {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    circle at center,
+    rgba(128, 90, 213, 0.2),
+    transparent 70%
+  );
+  animation: pulse 5s infinite alternate;
+}
+
+/* Particle effects */
+.particle-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.5;
+  animation: float 10s infinite linear;
+}
+
+/* Game message */
+.game-message {
+  text-align: center;
+  padding: 1rem;
+  background-color: #ebf8ff;
+  border-radius: 8px;
+  margin-top: 1rem;
+  font-weight: 500;
+}
+
+/* Animations */
+@keyframes pulse {
+  0% { opacity: 0.7; }
+  50% { opacity: 1; }
+  100% { opacity: 0.7; }
+}
+
+@keyframes bounce {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-5px); }
+}
+
+@keyframes float {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  25% { transform: translate(10px, 10px) rotate(90deg); }
+  50% { transform: translate(0, 20px) rotate(180deg); }
+  75% { transform: translate(-10px, 10px) rotate(270deg); }
+  100% { transform: translate(0, 0) rotate(360deg); }
+}
+
+@keyframes smoke {
+  0% { height: 10px; opacity: 1; transform: translateY(0) translateX(0); }
+  100% { height: 20px; opacity: 0; transform: translateY(-10px) translateX(5px); }
+}
+
+@keyframes glow {
+  0% { box-shadow: 0 0 5px rgba(128, 90, 213, 0.5); }
+  100% { box-shadow: 0 0 15px rgba(128, 90, 213, 0.8); }
+}
+
+@keyframes psychedelic {
+  0% { filter: hue-rotate(0deg); }
+  100% { filter: hue-rotate(360deg); }
+}
+
+/* Utility Classes */
+.fade-in {
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 768px) {
+  .game-stats {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .integration-visual {
+    flex-direction: column;
+  }
+  
+  .pattern-card {
+    min-width: 100%;
+  }
+  
+  .insight-grid {
+    grid-template-columns: 1fr;
+  }
+}
+/* Add these styles to fix the overlay issues */
+.game-container {
+  position: relative;
+  z-index: 1; /* Ensure main content stays above visual effects */
+}
+
+/* Remove or adjust the red ovals by modifying these styles */
+.visual-effect {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    circle at center,
+    rgba(128, 90, 213, 0.1), /* Reduced opacity from 0.2 to 0.1 */
+    transparent 80% /* Increased transparency radius from 70% to 80% */
+  );
+  animation: pulse 5s infinite alternate;
+  pointer-events: none; /* Ensures clicks pass through */
+  z-index: 0; /* Place behind content */
+}
+
+/* Improve progress bar visibility with better contrast */
+.progress-fill {
+  height: 100%;
+  background-color: #3182ce; /* Darker blue for better contrast */
+  transition: width 0.3s ease;
+  box-shadow: 0 0 3px rgba(66, 153, 225, 0.5); /* Add subtle glow */
+}
+
+/* Add styles to show improvement more clearly */
+.improvement-indicator {
+  height: 4px;
+  margin-top: 4px;
+  background-color: #48bb78; /* Green color for improvement */
+  width: 0; /* Will be set dynamically via JavaScript */
+  transition: width 0.5s ease-out;
+  border-radius: 2px;
+}
+
+/* Add comparison styles to highlight changes */
+.before-after-comparison {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.before-column, .after-column {
+  flex: 1;
+  padding: 0.5rem;
+  border-radius: 4px;
+}
+
+.before-column {
+  background-color: rgba(237, 242, 247, 0.7);
+  margin-right: 0.5rem;
+}
+
+.after-column {
+  background-color: rgba(154, 230, 180, 0.2);
+  margin-left: 0.5rem;
+}
+
+/* Enhance visibility of new perspectives */
+.new-perspectives {
+  background-color: #ebf8ff;
+  border-left: 4px solid #4299e1;
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: 0 4px 4px 0;
+}
+
+/* Improve the contrast of the card elements */
+.pattern-card, .insight-card {
+  border: 1px solid #e2e8f0;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Better indicator for active elements */
+.active, .completed {
+  position: relative;
+}
+
+.active::before, .completed::before {
+  content: "";
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #48bb78;
+  border: 2px solid white;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Fix progress steps visibility */
+.progress-step {
+  position: relative;
+  z-index: 5; /* Ensure it stays above visual effects */
+}
+
+.step-indicator {
+  width: 30px;
+  height: 30px;
+  border: 2px solid white; /* Add border for better visibility */
+}
+
+.step-indicator.completed {
+  background-color: #48bb78;
+  color: white;
+  box-shadow: 0 0 5px rgba(72, 187, 120, 0.5); /* Add glow effect */
+}
+
+/* Improve DMN meter visibility */
+.dmn-meter {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.meter-fill {
+  height: 100%;
+  transition: width 0.3s ease;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1); /* Add inner shadow for depth */
+}
+
+.meter-fill.high {
+  background-color: #e53e3e;
+  background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.1) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.1) 75%, transparent 75%);
+  background-size: 10px 10px; /* Add texture for better visibility */
+}
+
+.meter-fill.medium {
+  background-color: #f6ad55;
+  background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.1) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.1) 75%, transparent 75%);
+  background-size: 10px 10px;
+}
+
+.meter-fill.low {
+  background-color: #48bb78;
+  background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.1) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.1) 75%, transparent 75%);
+  background-size: 10px 10px;
+}
+
+/* Fix for the session screen timer visibility */
+.timer-bar {
+  background-color: white;
+  padding: 0.5rem;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.timer-fill {
+  background-color: #4299e1;
+  background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%);
+  background-size: 20px 20px;
+  animation: progress-animation 2s linear infinite;
+}
+
+@keyframes progress-animation {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 20px 0;
+  }
+}
+
+/* Add specific contrast improvements for the before/after sections */
+.before-treatment, .after-treatment {
+  position: relative;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+}
+
+.before-treatment {
+  background-color: #f7fafc;
+  border-left: 4px solid #a0aec0;
+}
+
+.after-treatment {
+  background-color: #f0fff4;
+  border-left: 4px solid #48bb78;
+}
+
+/* Add section headers with better visibility */
+.section-header {
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #e2e8f0;
+  color: #2d3748;
+}
+.obstacles-container {
+  position: relative; /* Ensure container can hold absolutely positioned children */
+  width: 100%;
+  height: 300px; /* or some fixed height */
+  border: 2px dashed #ccc; /* Visual cue for container boundaries */
+  margin-top: 20px;
+}
+
+.obstacle {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  background-color: rgba(255, 0, 0, 0.8);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.strength-meter {
+  position: relative;
+  width: 100%;
+  height: 20px;
+  background: #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 5px;
+}
+
+.strength-fill {
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+.click-count {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.75rem;
+  line-height: 20px;
+  color: #fff;
+  pointer-events: none;
+}
+/* Trippy animated background for strength-fill */
+@keyframes trippyAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.trippy {
+  background: linear-gradient(270deg, #ff69b4, #8a2be2, #00ffff, #ff4500);
+  background-size: 400% 400%;
+  animation: trippyAnimation 3s ease infinite;
+}
+
+/* Adjust the insight strength meter container for clarity */
+.strength-meter {
+  position: relative;
+  width: 100%;
+  height: 20px;
+  background: #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 5px;
+}
+
+.strength-fill {
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+.click-count {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.75rem;
+  line-height: 20px;
+  color: #fff;
+  pointer-events: none;
+}
+
+
+.obstacle:hover {
+  transform: scale(1.1);
+}
+
+/* Fix the red oval issue specifically */
+.bad-trip-visuals .turbulent-mind,
+.bad-trip-visuals .distortion-effect {
+  z-index: 0; /* Keep these effects behind content */
+  pointer-events: none; /* Allow clicks to pass through */
+}
